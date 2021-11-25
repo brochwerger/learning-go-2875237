@@ -12,24 +12,46 @@ import (
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Print("Value 1: ")
-	input1, _ := reader.ReadString('\n')
-	float1, err := strconv.ParseFloat(strings.TrimSpace(input1), 64)
-	if err != nil {
-		fmt.Println(err)
-		panic("Value 1 must be a number")
+	float1, _ := getInputFromUser(reader, "Value 1: ", true)
+	float2, _ := getInputFromUser(reader, "Value 2: ", true)
+	_, operation := getInputFromUser(reader, "Operation: ", false)
+
+	var result float64
+
+	switch operation {
+		case "+": result = float1 + float2
+		case "-": result = float1 - float2
+		case "*": result = float1 * float2
+		case "/": result = float1 / float2
+		
 	}
 
-	fmt.Print("Value 2: ")
-	input2, _ := reader.ReadString('\n')
-	float2, err := strconv.ParseFloat(strings.TrimSpace(input2), 64)
-	if err != nil {
-		fmt.Println(err)
-		panic("Value 2 must be a number")
-	}
+	result = math.Round(result*100) / 100
+	fmt.Printf("Result of %v %v %v is %v\n\n", float1, operation, float2, result)
 
-	sum := float1 + float2
-	sum = math.Round(sum*100) / 100
-	fmt.Printf("The sum of %v and %v is %v\n\n", float1, float2, sum)
+}
+
+func getInputFromUser(reader *bufio.Reader, msg string, isNumber bool) (float64, string) {
+	fmt.Print(msg)
+	input, _ := reader.ReadString('\n')
+	if isNumber {
+
+		number, err := strconv.ParseFloat(strings.TrimSpace(input), 64)
+		if err != nil {
+			fmt.Println(err)
+			panic("Value must be a number")
+		}
+		return number, ""
+	
+	} else {
+		operation := strings.TrimSpace(input)
+
+		switch operation {
+		  case "+", "-", "*", "/":
+			return 0, operation
+		  default:
+			panic("Operation must be one of: +, -, *, /")
+		}
+	}
 
 }
