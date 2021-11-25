@@ -23,7 +23,9 @@ func main() {
 		case "-": result = float1 - float2
 		case "*": result = float1 * float2
 		case "/": result = float1 / float2
-		
+		default:
+			panic("Operation must be one of: +, -, *, /")
+	
 	}
 
 	result = math.Round(result*100) / 100
@@ -44,14 +46,7 @@ func getInputFromUser(reader *bufio.Reader, msg string, isNumber bool) (float64,
 		return number, ""
 	
 	} else {
-		operation := strings.TrimSpace(input)
-
-		switch operation {
-		  case "+", "-", "*", "/":
-			return 0, operation
-		  default:
-			panic("Operation must be one of: +, -, *, /")
-		}
+		return 0, strings.TrimSpace(input)
 	}
 
 }
